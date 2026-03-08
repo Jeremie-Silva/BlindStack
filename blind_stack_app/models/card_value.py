@@ -10,6 +10,8 @@ CARD_VALUE_MAX: int = 12
 
 
 class CardValue(Model):
+    CARD_VALUE_MIN: int = CARD_VALUE_MIN
+    CARD_VALUE_MAX: int = CARD_VALUE_MAX
 
     class Color(TextChoices):
         BLACK = "Black", "Noir"
