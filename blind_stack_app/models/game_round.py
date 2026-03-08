@@ -1,0 +1,60 @@
+from django.db.models import Model, DateTimeField, ForeignKey, CASCADE, CheckConstraint, Q, F
+from blind_stack_app.models.player import Player
+
+
+
+class GameRound(Model):
+    player_1 = ForeignKey(
+        to=Player, on_delete=CASCADE,
+        blank=False, null=False,
+        related_name="game_as_player_one",
+        verbose_name="Players", help_text="Player One of the GameRound",
+    )
+    player_2 = ForeignKey(
+        to=Player, on_delete=CASCADE,
+        blank=False, null=False,
+        related_name="game_as_player_two",
+        verbose_name="Players", help_text="Player Two of the GameRound",
+    )
+    player_3 = ForeignKey(
+        to=Player, on_delete=CASCADE,
+        blank=False, null=False,
+        related_name="game_as_player_three",
+        verbose_name="Players", help_text="Player Three of the GameRound",
+    )
+    player_4 = ForeignKey(
+        to=Player, on_delete=CASCADE,
+        blank=True, null=True,
+        related_name="game_as_player_four",
+        verbose_name="Players", help_text="Player Four of the GameRound",
+    )
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return f"{self.id} {self.player_1}-{self.player_2}-{self.player_3}-{self.player_4} {self.created_at}"
+
+
+    class Meta:
+        app_label = "blind_stack_app"
+        verbose_name = "Partie de jeu"
+        verbose_name_plural = "Parties de jeu"
+        constraints = [
+            CheckConstraint(
+                condition=(
+                    ~Q(player_1=F("player_2")) &  # le joueur 1 doit être différent du 2
+                    ~Q(player_1=F("player_3")) &  # le joueur 1 doit être différent du 3
+                    ~Q(player_2=F("player_3")) &  # le joueur 2 doit être différent du 3
+                    (
+                        Q(player_4__isnull=True) |  # le joueur 4 n'est pas présent (ou)
+                            (
+                                ~Q(player_1=F("player_4")) &  # le joueur 4 est différent du 1
+                                ~Q(player_2=F("player_4")) &  # le joueur 4 est différent du 2
+                                ~Q(player_3=F("player_4"))    # le joueur 4 est différent du 3
+                            )
+                    )
+                ),
+                name="unique_players_in_game_round"
+            )
+        ]
