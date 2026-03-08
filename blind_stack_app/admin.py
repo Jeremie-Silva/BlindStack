@@ -46,4 +46,3 @@ class GameRoundAdmin(DjangoObjectActions, ModelAdmin):
         return obj.add_cards()
 
     change_actions = ("add_cards",)
-
