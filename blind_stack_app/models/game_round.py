@@ -58,3 +58,15 @@ class GameRound(Model):
                 name="unique_players_in_game_round"
             )
         ]
+
+
+    def add_card(self):
+        pass
+        # Card: Model = apps.get_model("blind_stack_app", "Card")
+        # CardValue: Model = apps.get_model("blind_stack_app", "CardValue")
+        #
+        # if self.cards.all().count() > 0:
+        #     return self
+        # for card_value in CardValue.objects.all():
+        #     self.cards.add(Card.objects.create(value=card_value, game_round=self))
+        # return self
