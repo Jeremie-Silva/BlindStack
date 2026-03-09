@@ -36,9 +36,9 @@ class CardInline(TabularInline):
 
 @register(GameRound)
 class GameRoundAdmin(DjangoObjectActions, ModelAdmin):
-    list_display = ("pk", "player_1", "player_2", "player_3", "player_4", "created_at", "updated_at",)
-    search_fields = ("pk", "player_1", "player_2", "player_3", "player_4", "created_at", "updated_at",)
-    list_filter = ("player_1", "player_2", "player_3", "player_4",)
+    list_display = ("pk", "completed", "player_1", "player_2", "player_3", "player_4", "created_at", "updated_at",)
+    search_fields = ("pk", "completed", "player_1", "player_2", "player_3", "player_4", "created_at", "updated_at",)
+    list_filter = ("completed", "player_1", "player_2", "player_3", "player_4",)
     inlines = [CardInline]
 
     @action(label="Générer toutes les cartes de la partie", description="Création des cartes")

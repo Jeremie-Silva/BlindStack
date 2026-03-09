@@ -1,4 +1,4 @@
-from django.db.models import Model, DateTimeField, ForeignKey, CASCADE, CheckConstraint, Q, F
+from django.db.models import Model, DateTimeField, ForeignKey, CASCADE, CheckConstraint, Q, F, BooleanField
 from blind_stack_app.models.player import Player
 
 
@@ -28,12 +28,17 @@ class GameRound(Model):
         related_name="game_as_player_four",
         verbose_name="Players", help_text="Player Four of the GameRound",
     )
+    completed = BooleanField(
+        default=False,
+        blank=False, null=False,
+        verbose_name="Completeds", help_text="The GameRound is completed ?",
+    )
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
 
     def __str__(self):
-        return f"{self.id} {self.player_1}-{self.player_2}-{self.player_3}-{self.player_4} {self.created_at}"
+        return f"{self.id} {self.completed} {self.player_1}-{self.player_2}-{self.player_3}-{self.player_4} {self.created_at}"
 
 
     class Meta:
