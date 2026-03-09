@@ -3,3 +3,4 @@ django-ninja==1.5.3
 httpx==0.28.1
 django-object-actions==5.0.0
 django-extensions==4.1
+django-stubs==5.2.9
