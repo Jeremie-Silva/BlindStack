@@ -40,7 +40,7 @@ class Card(Model):
 
 
     def __str__(self):
-        return f"{self.id} {self.value} {self.game_round} {self.player} {self.stack} {self.order_in_stack}"
+        return f"{self.id=} {self.value}"
 
 
     class Meta:

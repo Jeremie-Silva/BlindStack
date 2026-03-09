@@ -1,3 +1,4 @@
+from typing import Self
 from django.db.models import Model, DateTimeField, ForeignKey, CASCADE, CheckConstraint, Q, F, BooleanField
 from blind_stack_app.models.player import Player
 
@@ -65,13 +66,11 @@ class GameRound(Model):
         ]
 
 
-    def add_card(self):
-        pass
-        # Card: Model = apps.get_model("blind_stack_app", "Card")
-        # CardValue: Model = apps.get_model("blind_stack_app", "CardValue")
-        #
-        # if self.cards.all().count() > 0:
-        #     return self
-        # for card_value in CardValue.objects.all():
-        #     self.cards.add(Card.objects.create(value=card_value, game_round=self))
-        # return self
+    def add_cards(self) -> Self:
+        from blind_stack_app.models.card import Card
+        from blind_stack_app.models.card_value import CardValue
+        if self.cards.all().count() > 0:
+            return self
+        for card_value in CardValue.objects.all():
+            self.cards.add(Card.objects.create(value=card_value, game_round=self))
+        return self

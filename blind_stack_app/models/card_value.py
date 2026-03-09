@@ -35,7 +35,7 @@ class CardValue(Model):
 
 
     def __str__(self):
-        return f"{self.id} {self.value}-{self.color}"
+        return f"{self.value}-{self.color}"
 
 
     class Meta:
