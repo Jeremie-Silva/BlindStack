@@ -1,13 +1,21 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db.models import Model, PositiveSmallIntegerField, DateTimeField, ForeignKey, CASCADE
+from django.db.models import Model, PositiveSmallIntegerField, DateTimeField, ForeignKey, CASCADE, CheckConstraint, Q
 from blind_stack_app.models.game_round import GameRound
 
 
 
+STACK_RANK_MIN: int = 1
+STACK_RANK_MAX: int = 6
+
+
+
 class Stack(Model):
+    STACK_RANK_MIN: int = STACK_RANK_MIN
+    STACK_RANK_MAX: int = STACK_RANK_MAX
+
     rank = PositiveSmallIntegerField(
         blank=False, null=False,
-        validators=[MinValueValidator(1), MaxValueValidator(6)],
+        validators=[MinValueValidator(STACK_RANK_MIN), MaxValueValidator(STACK_RANK_MAX)],
         verbose_name="Ranks", help_text="Rank of the stack",
     )
     game_round = ForeignKey(
@@ -28,3 +36,9 @@ class Stack(Model):
         app_label = "blind_stack_app"
         verbose_name = "Pile de carte"
         verbose_name_plural = "Piles de cartes"
+        constraints = [
+            CheckConstraint(
+                condition=Q(rank__gte=STACK_RANK_MIN) & Q(rank__lte=STACK_RANK_MAX),
+                name="check_stack_rank"
+            )
+        ]

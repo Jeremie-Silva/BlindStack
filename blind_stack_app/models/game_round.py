@@ -74,3 +74,12 @@ class GameRound(Model):
         for card_value in CardValue.objects.all():
             self.cards.add(Card.objects.create(value=card_value, game_round=self))
         return self
+
+
+    def add_stacks(self) -> Self:
+        from blind_stack_app.models.stack import Stack
+        if self.stacks.all().count() > 0:
+            return self
+        for rank in range(Stack.STACK_RANK_MIN, Stack.STACK_RANK_MAX + 1):
+            self.stacks.add(Stack.objects.create(rank=rank, game_round=self))
+        return self

@@ -2,8 +2,7 @@ from django.contrib.admin import register, ModelAdmin, TabularInline
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django_object_actions import DjangoObjectActions, action
-from blind_stack_app.models import CardValue, Player, GameRound, Card
-
+from blind_stack_app.models import CardValue, Player, GameRound, Card, Stack
 
 
 @register(CardValue)
@@ -34,15 +33,42 @@ class CardInline(TabularInline):
 
 
 
+class StackInline(TabularInline):
+    model = Stack
+    extra = 0
+
+
+
 @register(GameRound)
 class GameRoundAdmin(DjangoObjectActions, ModelAdmin):
     list_display = ("pk", "completed", "player_1", "player_2", "player_3", "player_4", "created_at", "updated_at",)
     search_fields = ("pk", "completed", "player_1", "player_2", "player_3", "player_4", "created_at", "updated_at",)
     list_filter = ("completed", "player_1", "player_2", "player_3", "player_4",)
-    inlines = [CardInline]
+    inlines = [CardInline, StackInline]
 
-    @action(label="Générer toutes les cartes de la partie", description="Création des cartes")
+    @action(label="1 - Générer toutes les cartes de la partie", description="Création des cartes")
     def add_cards(self, request: HttpRequest, obj: GameRound):
         return obj.add_cards()
 
-    change_actions = ("add_cards",)
+    @action(label="2 - Générer toutes les piles de la partie", description="Création des piles")
+    def add_stacks(self, request: HttpRequest, obj: GameRound):
+        return obj.add_stacks()
+
+    change_actions = ("add_cards", "add_stacks",)
+
+
+
+@register(Card)
+class CardAdmin(DjangoObjectActions, ModelAdmin):
+    list_display = ("pk", "value", "player", "stack", "game_round_id", "order_in_stack", "created_at", "updated_at",)
+    search_fields = ("pk", "value", "player", "stack", "game_round_id", "order_in_stack", "created_at", "updated_at",)
+    list_filter = ("value", "player", "stack", "game_round_id", "order_in_stack",)
+
+
+
+@register(Stack)
+class StackAdmin(DjangoObjectActions, ModelAdmin):
+    list_display = ("pk", "rank", "game_round_id", "created_at", "updated_at",)
+    search_fields = ("pk", "rank", "game_round_id", "created_at", "updated_at",)
+    list_filter = ("rank", "game_round_id",)
+
