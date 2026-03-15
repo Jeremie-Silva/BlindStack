@@ -1,3 +1,4 @@
+from random import shuffle
 from typing import Self
 from django.db.models import Model, DateTimeField, ForeignKey, CASCADE, CheckConstraint, Q, F, BooleanField
 from blind_stack_app.models.player import Player
@@ -83,3 +84,16 @@ class GameRound(Model):
         for rank in range(Stack.STACK_RANK_MIN, Stack.STACK_RANK_MAX + 1):
             self.stacks.add(Stack.objects.create(rank=rank, game_round=self))
         return self
+
+
+    def shuffle_cards(self) -> Self:
+        if self.cards.filter(order_in_deck__isnull=False).exists():
+            return self
+        deck_positions: list[int] = list(range(1, self.cards.all().count() + 1))
+        shuffle(deck_positions)
+        for position, card in zip(deck_positions, self.cards.all()):
+            card.order_in_deck = position
+            card.save()
+        return self
+
+# TODO: distribuer les cartes

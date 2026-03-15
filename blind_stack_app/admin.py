@@ -54,15 +54,19 @@ class GameRoundAdmin(DjangoObjectActions, ModelAdmin):
     def add_stacks(self, request: HttpRequest, obj: GameRound):
         return obj.add_stacks()
 
-    change_actions = ("add_cards", "add_stacks",)
+    @action(label="3 - Mélanger les cartes", description="Mélanger les cartes de la partie")
+    def shuffle_cards(self, request: HttpRequest, obj: GameRound):
+        return obj.shuffle_cards()
+
+    change_actions = ("add_cards", "add_stacks", "shuffle_cards")
 
 
 
 @register(Card)
 class CardAdmin(DjangoObjectActions, ModelAdmin):
-    list_display = ("pk", "value", "player", "stack", "game_round_id", "order_in_stack", "created_at", "updated_at",)
-    search_fields = ("pk", "value", "player", "stack", "game_round_id", "order_in_stack", "created_at", "updated_at",)
-    list_filter = ("value", "player", "stack", "game_round_id", "order_in_stack",)
+    list_display = ("pk", "value", "player", "stack", "game_round_id", "order_in_deck", "order_in_stack", "created_at", "updated_at",)
+    search_fields = ("pk", "value", "player", "stack", "game_round_id", "order_in_deck", "order_in_stack", "created_at", "updated_at",)
+    list_filter = ("value", "player", "stack", "game_round_id", "order_in_deck", "order_in_stack",)
 
 
 

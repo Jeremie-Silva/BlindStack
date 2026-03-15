@@ -35,6 +35,10 @@ class Card(Model):
         blank=True, null=True,
         verbose_name="Orders in Stack", help_text="Order of the Card in the Stack",
     )
+    order_in_deck = PositiveSmallIntegerField(
+        blank=True, null=True,
+        verbose_name="Orders in Deck", help_text="Order of the Card in the Deck",
+    )
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
