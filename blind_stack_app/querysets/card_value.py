@@ -1,14 +1,10 @@
-from typing import TYPE_CHECKING
+from typing import Self
 from django.db.models import QuerySet
-
-
-if TYPE_CHECKING:
-    from blind_stack_app.models import CardValue
 
 
 
 class CardValueQuerySet(QuerySet):
-    def generate_all_cards_values(self) -> QuerySet["CardValue"]:
+    def generate_all_cards_values(self) -> Self:
         if self.all().count() > 0:
             return self
         for color in self.model.Color.values:
