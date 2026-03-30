@@ -3,6 +3,7 @@ from blind_stack_app.models.stack import Stack
 from blind_stack_app.models.game_round import GameRound
 from blind_stack_app.models.player import Player
 from blind_stack_app.models.card_value import CardValue
+from blind_stack_app.querysets import CardsQuerySet
 
 
 
@@ -42,6 +43,7 @@ class Card(Model):
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
+    objects: CardsQuerySet = CardsQuerySet.as_manager()
 
     def __str__(self):
         return f"{self.id=} {self.value}"

@@ -1,1 +1,2 @@
 from blind_stack_app.querysets.card_value import CardValueQuerySet
+from blind_stack_app.querysets.card import CardsQuerySet
