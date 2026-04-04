@@ -68,11 +68,9 @@ class GameRound(Model):
 
     def add_cards(self) -> Self:
         from blind_stack_app.models.card import Card
-        from blind_stack_app.models.card_value import CardValue
         if self.cards.all().count() > 0:
             return self
-        for card_value in CardValue.objects.all():
-            self.cards.add(Card.objects.create(value=card_value, game_round=self))
+        Card.objects.generate_cards_of_game_round(game_round=self)
         return self
 
 

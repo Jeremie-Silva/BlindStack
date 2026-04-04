@@ -2,9 +2,8 @@ from random import shuffle
 from typing import TYPE_CHECKING, Self
 from django.db.models import QuerySet
 
-
 if TYPE_CHECKING:
-    from blind_stack_app.models import Card
+    from blind_stack_app.models import Card, GameRound
 
 
 
@@ -18,4 +17,11 @@ class CardsQuerySet(QuerySet):
         for position, card in zip(deck_positions, self.all()):
             card.order_in_deck = position
             card.save()
+        return self
+
+
+    def generate_cards_of_game_round(self, game_round: "GameRound") -> Self:
+        from blind_stack_app.models import CardValue
+        for card_value in CardValue.objects.all():
+            self.create(value=card_value, game_round=game_round)
         return self
