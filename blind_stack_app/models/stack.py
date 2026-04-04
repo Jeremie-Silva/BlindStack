@@ -1,7 +1,7 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Model, PositiveSmallIntegerField, DateTimeField, ForeignKey, CASCADE, CheckConstraint, Q
 from blind_stack_app.models.game_round import GameRound
-
+from blind_stack_app.querysets import StackQuerySet
 
 
 STACK_RANK_MIN: int = 1
@@ -27,6 +27,7 @@ class Stack(Model):
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
+    objects: StackQuerySet = StackQuerySet.as_manager()
 
     def __str__(self):
         return f"{self.id} {self.rank}-{self.game_round}"

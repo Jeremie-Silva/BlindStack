@@ -78,8 +78,7 @@ class GameRound(Model):
         from blind_stack_app.models.stack import Stack
         if self.stacks.all().count() > 0:
             return self
-        for rank in range(Stack.STACK_RANK_MIN, Stack.STACK_RANK_MAX + 1):
-            self.stacks.add(Stack.objects.create(rank=rank, game_round=self))
+        Stack.objects.generate_stacks_of_game_round(game_round=self)
         return self
 
 
