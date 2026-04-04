@@ -4,14 +4,13 @@ from django.db.models import QuerySet
 
 
 if TYPE_CHECKING:
-    from blind_stack_app.models import Card, GameRound
+    from blind_stack_app.models import GameRound
 
 
 
 class CardQuerySet(QuerySet):
-    def shuffle_cards(self) -> Self:
-        game_round_ids: QuerySet["Card"] = self.values_list("game_round_id", flat=True).distinct()
-        if game_round_ids.count() != 1:
+    def shuffle_cards(self, game_round: "GameRound") -> Self:
+        if self.exclude(game_round=game_round).exists():
             raise ValueError("All cards must belong to the same GameRound to be shuffled.")
         deck_positions: list[int] = list(range(1, self.count() + 1))
         shuffle(deck_positions)

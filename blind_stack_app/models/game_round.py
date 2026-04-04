@@ -83,9 +83,10 @@ class GameRound(Model):
 
 
     def shuffle_cards(self) -> Self:
-        if self.cards.filter(order_in_deck__isnull=False).exists():
+        if self.cards and self.cards.filter(order_in_deck__isnull=False).exists():
             return self
-        self.cards.shuffle_cards()
+        self.cards.shuffle_cards(game_round=self)
         return self
+
 
 # TODO: distribuer les cartes
