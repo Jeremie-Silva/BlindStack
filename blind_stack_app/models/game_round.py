@@ -66,6 +66,12 @@ class GameRound(Model):
         ]
 
 
+    @property
+    def active_players(self) -> list["Player"]:
+        all_possible_players: list["Player"] = [self.player_1, self.player_2, self.player_3, self.player_4]
+        return list(filter(lambda player: player is not None, all_possible_players))
+
+
     def add_cards(self) -> Self:
         from blind_stack_app.models.card import Card
         if self.cards.all().count() > 0:
@@ -89,4 +95,9 @@ class GameRound(Model):
         return self
 
 
-# TODO: distribuer les cartes
+    def distribute_cards(self) -> Self:
+        from blind_stack_app.models import Card
+        if self.cards and self.cards.filter(player__isnull=False).exists():
+            return self
+        Card.objects.distribute_cards(game_round=self)
+        return self

@@ -25,3 +25,11 @@ class CardQuerySet(QuerySet):
         for card_value in CardValue.objects.all():
             self.create(value=card_value, game_round=game_round)
         return self
+
+
+    def distribute_cards(self, game_round: "GameRound") -> Self:
+        for index, card in enumerate(self.order_by("order_in_deck")):
+            player_key: int = index % len(game_round.active_players)
+            card.player = list(game_round.active_players)[player_key]
+            card.save()
+        return self

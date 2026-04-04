@@ -46,19 +46,23 @@ class GameRoundAdmin(DjangoObjectActions, ModelAdmin):
     list_filter = ("completed", "player_1", "player_2", "player_3", "player_4",)
     inlines = [CardInline, StackInline]
 
-    @action(label="1 - Générer toutes les cartes de la partie", description="Création des cartes")
+    @action(label="1 - Générer les cartes", description="Création de toutes les cartes de la partie")
     def add_cards(self, request: HttpRequest, obj: GameRound):
         return obj.add_cards()
 
-    @action(label="2 - Générer toutes les piles de la partie", description="Création des piles")
+    @action(label="2 - Générer les piles", description="Création de toutes les piles de la partie")
     def add_stacks(self, request: HttpRequest, obj: GameRound):
         return obj.add_stacks()
 
-    @action(label="3 - Mélanger les cartes", description="Mélanger les cartes de la partie")
+    @action(label="3 - Mélanger les cartes", description="Mélanger toutes les cartes de la partie")
     def shuffle_cards(self, request: HttpRequest, obj: GameRound):
         return obj.shuffle_cards()
 
-    change_actions = ("add_cards", "add_stacks", "shuffle_cards")
+    @action(label="4 - Distribuer les cartes", description="Distribuer toutes les cartes de la partie")
+    def distribute_cards(self, request: HttpRequest, obj: GameRound):
+        return obj.distribute_cards()
+
+    change_actions = ("add_cards", "add_stacks", "shuffle_cards", "distribute_cards")
 
 
 
