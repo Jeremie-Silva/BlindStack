@@ -4,3 +4,5 @@ httpx==0.28.1
 django-object-actions==5.0.0
 django-extensions==4.1
 django-stubs==5.2.9
+typer==0.24.1
+questionary==2.1.1

@@ -1,0 +1,1 @@
+from cli_client.app import cli_application
