@@ -36,9 +36,6 @@ def cli_application() -> None:
             choices=[Action.JOUER.value, Action.QUITTER.value],
         ).ask()
 
-        if response == Action.JOUER.value:
-            pass
-        elif response == Action.QUITTER.value:
         if input_choice == Action.JOUER.value:
             player: Player = cli_select_player()
             game_round: GameRound = cli_start_new_game_round(player=player)
