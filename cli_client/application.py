@@ -40,7 +40,7 @@ def cli_application() -> None:
         if input_choice == Action.JOUER.value:
             player: Player = cli_select_player()
             bots: list[Bot] = cli_select_bots()
-            game_round: GameRound = cli_start_new_game_round(player=player)
+            game_round: GameRound = cli_start_new_game_round(player=player, bots=bots)
         elif input_choice == Action.QUITTER.value:
             break
         else:

@@ -1,5 +1,6 @@
 from typing import Self
 from django.db.models import Model, DateTimeField, ForeignKey, CASCADE, CheckConstraint, Q, F, BooleanField
+from blind_stack_app.models.bot import Bot
 from blind_stack_app.models.player import Player
 
 
@@ -12,22 +13,22 @@ class GameRound(Model):
         verbose_name="Players", help_text="Player One of the GameRound",
     )
     player_2 = ForeignKey(
-        to=Player, on_delete=CASCADE,
+        to=Bot, on_delete=CASCADE,
         blank=False, null=False,
         related_name="game_as_player_two",
-        verbose_name="Players", help_text="Player Two of the GameRound",
+        verbose_name="Players", help_text="Player Two of the GameRound (Bot)",
     )
     player_3 = ForeignKey(
-        to=Player, on_delete=CASCADE,
+        to=Bot, on_delete=CASCADE,
         blank=False, null=False,
         related_name="game_as_player_three",
-        verbose_name="Players", help_text="Player Three of the GameRound",
+        verbose_name="Players", help_text="Player Three of the GameRound (Bot)",
     )
     player_4 = ForeignKey(
-        to=Player, on_delete=CASCADE,
+        to=Bot, on_delete=CASCADE,
         blank=True, null=True,
         related_name="game_as_player_four",
-        verbose_name="Players", help_text="Player Four of the GameRound",
+        verbose_name="Players", help_text="Player Four of the GameRound (Bot)",
     )
     completed = BooleanField(
         default=False,
@@ -49,26 +50,23 @@ class GameRound(Model):
         constraints = [
             CheckConstraint(
                 condition=(
-                    ~Q(player_1=F("player_2")) &  # le joueur 1 doit être différent du 2
-                    ~Q(player_1=F("player_3")) &  # le joueur 1 doit être différent du 3
-                    ~Q(player_2=F("player_3")) &  # le joueur 2 doit être différent du 3
+                    ~Q(player_2=F("player_3")) &  # le bot 2 doit être différent du 3
                     (
-                        Q(player_4__isnull=True) |  # le joueur 4 n'est pas présent (ou)
+                        Q(player_4__isnull=True) |  # le bot 4 n'est pas présent (ou)
                             (
-                                ~Q(player_1=F("player_4")) &  # le joueur 4 est différent du 1
-                                ~Q(player_2=F("player_4")) &  # le joueur 4 est différent du 2
-                                ~Q(player_3=F("player_4"))    # le joueur 4 est différent du 3
+                                ~Q(player_2=F("player_4")) &  # le bot 2 doit être différent du 4
+                                ~Q(player_3=F("player_4"))    # le bot 3 doit être différent du 4
                             )
                     )
                 ),
-                name="unique_players_in_game_round"
+                name="unique_bots_in_game_round"
             )
         ]
 
 
     @property
     def active_players(self) -> list["Player"]:
-        all_possible_players: list["Player"] = [self.player_1, self.player_2, self.player_3, self.player_4]
+        all_possible_players: list["Player" | "Bot"] = [self.player_1, self.player_2, self.player_3, self.player_4]
         return list(filter(lambda player: player is not None, all_possible_players))
 
 
