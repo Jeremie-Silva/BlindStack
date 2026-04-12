@@ -1,8 +1,7 @@
 import typer
 import sys
 from django.core.management import BaseCommand
-from cli_client import cli_application
-
+from cli_client.application import cli_application
 
 
 class Command(BaseCommand):

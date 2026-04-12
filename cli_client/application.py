@@ -1,6 +1,9 @@
 import questionary
 import typer
 from enum import Enum
+from blind_stack_app.models import Player, GameRound
+from cli_client.select_player import cli_select_player
+from cli_client.start_new_game_round import cli_start_new_game_round
 
 
 
@@ -28,7 +31,7 @@ def cli_application() -> None:
     typer.echo("Bienvenue dans le jeu BlindStack !")
 
     while True:
-        response: str = questionary.select(
+        input_choice: Action = questionary.select(
             message="Qu'est-ce que vous voulez faire?",
             choices=[Action.JOUER.value, Action.QUITTER.value],
         ).ask()
@@ -36,6 +39,10 @@ def cli_application() -> None:
         if response == Action.JOUER.value:
             pass
         elif response == Action.QUITTER.value:
+        if input_choice == Action.JOUER.value:
+            player: Player = cli_select_player()
+            game_round: GameRound = cli_start_new_game_round(player=player)
+        elif input_choice == Action.QUITTER.value:
             break
         else:
             typer.echo("Action inconnue")

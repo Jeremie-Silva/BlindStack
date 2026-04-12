@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db.models import Model, CharField, OneToOneField, PROTECT, DateTimeField
+from blind_stack_app.querysets import PlayerQuerySet
 
 
 
@@ -16,6 +17,8 @@ class Player(Model):
     )
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
+
+    objects = PlayerQuerySet.as_manager()
 
 
     def __str__(self):
