@@ -1,6 +1,5 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Model, PositiveSmallIntegerField, DateTimeField, ForeignKey, CASCADE, CheckConstraint, Q
-from blind_stack_app.models.game_round import GameRound
 from blind_stack_app.querysets import StackQuerySet
 
 
@@ -19,7 +18,7 @@ class Stack(Model):
         verbose_name="Ranks", help_text="Rank of the stack",
     )
     game_round = ForeignKey(
-        to=GameRound, on_delete=CASCADE,
+        to="GameRound", on_delete=CASCADE,
         blank=False, null=False,
         related_name="stacks",
         verbose_name="GameRounds", help_text="GameRound",
@@ -29,7 +28,8 @@ class Stack(Model):
 
     objects: StackQuerySet = StackQuerySet.as_manager()
 
-    def __str__(self):
+
+    def __str__(self) -> str:
         return f"{self.id} {self.rank}-{self.game_round}"
 
 

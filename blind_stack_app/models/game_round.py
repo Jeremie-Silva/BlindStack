@@ -1,34 +1,36 @@
 from typing import Self
 from django.db.models import Model, DateTimeField, ForeignKey, CASCADE, CheckConstraint, Q, F, BooleanField
-from blind_stack_app.models.bot import Bot
-from blind_stack_app.models.player import Player
+from typing_extensions import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from blind_stack_app.models.participant import Participant
 
 
 
 class GameRound(Model):
-    player_1 = ForeignKey(
-        to=Player, on_delete=CASCADE,
+    participant_1 = ForeignKey(
+        to="Participant", on_delete=CASCADE,
         blank=False, null=False,
-        related_name="game_as_player_one",
-        verbose_name="Players", help_text="Player One of the GameRound",
+        related_name="game_as_participant_one",
+        verbose_name="Participants", help_text="Participant One of the GameRound",
     )
-    player_2 = ForeignKey(
-        to=Bot, on_delete=CASCADE,
+    participant_2 = ForeignKey(
+        to="Participant", on_delete=CASCADE,
         blank=False, null=False,
-        related_name="game_as_player_two",
-        verbose_name="Players", help_text="Player Two of the GameRound (Bot)",
+        related_name="game_as_participant_two",
+        verbose_name="Participants", help_text="Participant Two of the GameRound",
     )
-    player_3 = ForeignKey(
-        to=Bot, on_delete=CASCADE,
+    participant_3 = ForeignKey(
+        to="Participant", on_delete=CASCADE,
         blank=False, null=False,
-        related_name="game_as_player_three",
-        verbose_name="Players", help_text="Player Three of the GameRound (Bot)",
+        related_name="game_as_participant_three",
+        verbose_name="Participants", help_text="Participant Three of the GameRound",
     )
-    player_4 = ForeignKey(
-        to=Bot, on_delete=CASCADE,
+    participant_4 = ForeignKey(
+        to="Participant", on_delete=CASCADE,
         blank=True, null=True,
-        related_name="game_as_player_four",
-        verbose_name="Players", help_text="Player Four of the GameRound (Bot)",
+        related_name="game_as_participant_four",
+        verbose_name="Participants", help_text="Participant Four of the GameRound",
     )
     completed = BooleanField(
         default=False,
@@ -39,8 +41,8 @@ class GameRound(Model):
     updated_at = DateTimeField(auto_now=True)
 
 
-    def __str__(self):
-        return f"{self.id} {self.completed} {self.player_1}-{self.player_2}-{self.player_3}-{self.player_4} {self.created_at}"
+    def __str__(self) -> str:
+        return f"{self.id} {self.completed} {self.participant_1}-{self.participant_2}-{self.participant_3}-{self.participant_4} {self.created_at}"
 
 
     class Meta:
@@ -50,24 +52,27 @@ class GameRound(Model):
         constraints = [
             CheckConstraint(
                 condition=(
-                    ~Q(player_2=F("player_3")) &  # le bot 2 doit être différent du 3
+                    ~Q(participant_1=F("participant_2")) &  # le participant 1 doit être différent du 2
+                    ~Q(participant_1=F("participant_3")) &  # le participant 2 doit être différent du 3
+                    ~Q(participant_2=F("participant_3")) &  # le participant 2 doit être différent du 3
                     (
-                        Q(player_4__isnull=True) |  # le bot 4 n'est pas présent (ou)
+                        Q(participant_4__isnull=True) |  # le participant 4 n'est pas présent (ou)
                             (
-                                ~Q(player_2=F("player_4")) &  # le bot 2 doit être différent du 4
-                                ~Q(player_3=F("player_4"))    # le bot 3 doit être différent du 4
+                                ~Q(participant_2=F("participant_4")) &  # le participant 2 doit être différent du 4
+                                ~Q(participant_3=F("participant_4"))    # le participant 3 doit être différent du 4
                             )
                     )
                 ),
-                name="unique_bots_in_game_round"
-            )
+                name="unique_participants_in_game_round"
+            ),
+
         ]
 
 
     @property
-    def active_players(self) -> list["Player"]:
-        all_possible_players: list["Player" | "Bot"] = [self.player_1, self.player_2, self.player_3, self.player_4]
-        return list(filter(lambda player: player is not None, all_possible_players))
+    def active_participants(self) -> list["Participant"]:
+        all_possible_participants: list["Participant"] = [self.participant_1, self.participant_2, self.participant_3, self.participant_4]
+        return list(filter(None, all_possible_participants))
 
 
     def add_cards(self) -> Self:

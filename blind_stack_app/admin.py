@@ -2,7 +2,7 @@ from django.contrib.admin import register, ModelAdmin, TabularInline
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django_object_actions import DjangoObjectActions, action
-from blind_stack_app.models import CardValue, Player, GameRound, Card, Stack, Bot
+from blind_stack_app.models import CardValue, Player, GameRound, Card, Stack, Bot, Participant
 
 
 @register(CardValue)
@@ -41,9 +41,9 @@ class StackInline(TabularInline):
 
 @register(GameRound)
 class GameRoundAdmin(DjangoObjectActions, ModelAdmin):
-    list_display = ("pk", "completed", "player_1", "player_2", "player_3", "player_4", "created_at", "updated_at",)
-    search_fields = ("pk", "completed", "player_1", "player_2", "player_3", "player_4", "created_at", "updated_at",)
-    list_filter = ("completed", "player_1", "player_2", "player_3", "player_4",)
+    list_display = ("pk", "completed", "participant_1", "participant_2", "participant_3", "participant_4", "created_at", "updated_at",)
+    search_fields = ("pk", "completed", "participant_1", "participant_2", "participant_3", "participant_4", "created_at", "updated_at",)
+    list_filter = ("completed", "participant_1", "participant_2", "participant_3", "participant_4",)
     inlines = [CardInline, StackInline]
 
     @action(label="1 - Générer les cartes", description="Création de toutes les cartes de la partie")
@@ -68,9 +68,9 @@ class GameRoundAdmin(DjangoObjectActions, ModelAdmin):
 
 @register(Card)
 class CardAdmin(DjangoObjectActions, ModelAdmin):
-    list_display = ("pk", "value", "player", "stack", "game_round_id", "order_in_deck", "order_in_stack", "created_at", "updated_at",)
-    search_fields = ("pk", "value", "player", "stack", "game_round_id", "order_in_deck", "order_in_stack", "created_at", "updated_at",)
-    list_filter = ("value", "player", "stack", "game_round_id", "order_in_deck", "order_in_stack",)
+    list_display = ("pk", "value", "participant", "stack", "game_round_id", "order_in_deck", "order_in_stack", "created_at", "updated_at",)
+    search_fields = ("pk", "value", "participant", "stack", "game_round_id", "order_in_deck", "order_in_stack", "created_at", "updated_at",)
+    list_filter = ("value", "participant", "stack", "game_round_id", "order_in_deck", "order_in_stack",)
 
 
 
@@ -87,3 +87,11 @@ class BotAdmin(DjangoObjectActions, ModelAdmin):
     list_display = ("pk", "username", "is_unlocked", "created_at", "updated_at",)
     search_fields = ("pk", "username", "is_unlocked", "created_at", "updated_at",)
     list_filter = ("is_unlocked", "username",)
+
+
+
+@register(Participant)
+class ParticipantAdmin(DjangoObjectActions, ModelAdmin):
+    list_display = ("pk", "player", "bot", "game_round", "created_at", "updated_at",)
+    search_fields = ("pk", "player", "bot", "game_round", "created_at", "updated_at",)
+    list_filter = ("player", "bot", "game_round")

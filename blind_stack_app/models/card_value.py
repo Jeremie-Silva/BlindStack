@@ -34,7 +34,7 @@ class CardValue(Model):
     objects = CardValueQuerySet.as_manager()
 
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.value}-{self.color}"
 
 

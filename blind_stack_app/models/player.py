@@ -21,7 +21,7 @@ class Player(Model):
     objects = PlayerQuerySet.as_manager()
 
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.id} {self.username}"
 
 
