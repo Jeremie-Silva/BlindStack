@@ -1,4 +1,5 @@
 from django.db.models import Model, CharField, DateTimeField, BooleanField
+from blind_stack_app.querysets import BotQuerySet
 
 
 
@@ -15,6 +16,7 @@ class Bot(Model):
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
+    objects = BotQuerySet.as_manager()
 
     def __str__(self):
         return f"{self.id} {self.username}"

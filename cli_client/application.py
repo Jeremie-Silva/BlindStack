@@ -1,7 +1,8 @@
 import questionary
 import typer
 from enum import Enum
-from blind_stack_app.models import Player, GameRound
+from blind_stack_app.models import Player, GameRound, Bot
+from cli_client.select_bots import cli_select_bots
 from cli_client.select_player import cli_select_player
 from cli_client.start_new_game_round import cli_start_new_game_round
 
@@ -38,6 +39,7 @@ def cli_application() -> None:
 
         if input_choice == Action.JOUER.value:
             player: Player = cli_select_player()
+            bots: list[Bot] = cli_select_bots()
             game_round: GameRound = cli_start_new_game_round(player=player)
         elif input_choice == Action.QUITTER.value:
             break
