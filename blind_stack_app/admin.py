@@ -2,7 +2,7 @@ from django.contrib.admin import register, ModelAdmin, TabularInline
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django_object_actions import DjangoObjectActions, action
-from blind_stack_app.models import CardValue, Player, GameRound, Card, Stack
+from blind_stack_app.models import CardValue, Player, GameRound, Card, Stack, Bot
 
 
 @register(CardValue)
@@ -80,3 +80,10 @@ class StackAdmin(DjangoObjectActions, ModelAdmin):
     search_fields = ("pk", "rank", "game_round_id", "created_at", "updated_at",)
     list_filter = ("rank", "game_round_id",)
 
+
+
+@register(Bot)
+class BotAdmin(DjangoObjectActions, ModelAdmin):
+    list_display = ("pk", "username", "is_unlocked", "created_at", "updated_at",)
+    search_fields = ("pk", "username", "is_unlocked", "created_at", "updated_at",)
+    list_filter = ("is_unlocked", "username",)
