@@ -1,0 +1,34 @@
+extend-exclude = [
+    "migrations",
+]
+
+line-length = 150
+indent-width = 4
+target-version = "py311"
+# fix = true
+
+[format]
+
+quote-style = "double"  # Use double quotes for strings
+indent-style = "space"  # Indent with spaces, rather than tabs
+
+[lint]
+
+extend-select = ["I"]
+
+# Liste des Rules à ignorer.
+ignore = [
+]
+
+[lint.per-file-ignores]
+
+"__init__.py" = ["I001"]  # Ne pas trier les imports dans les fichier __init__.py
+
+[lint.pyflakes]
+extend-generics = [# Sans ce réglage, ruff verrait les types Generic passés aux classes mentionnées ci-dessous comme importés mais non utilisés et on serait obligé d'ajouter un `# noqa: F401`. Tant que la règle F401 est ignorée, cela n'a pas d'intérêt.
+    "django.db.models.ForeignKey",
+    "django.db.models.OneToOneField",
+    "django.db.models.ManyToManyField",
+    "django.db.models.manager.Manager",
+    "django.db.models.QuerySet",
+]

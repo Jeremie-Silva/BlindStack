@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json",
+  "typeCheckingMode": "standard",
+  "reportMissingTypeArgument": "information",
+  "extraPaths": ["src"],
+  "reportUnusedImport": "warning",
+  "reportUnusedClass": "warning",
+  "reportUnusedFunction": "warning",
+  "reportUnusedVariable": "warning",
+  "reportDuplicateImport": "warning",
+  "reportAttributeAccessIssue": "warning",
+  "reportCallIssue": "warning",
+  "reportIncompatibleVariableOverride": "warning",
+  "reportRedeclaration": "warning",
+  "reportOptionalMemberAccess": "warning",
+  "pythonVersion": "3.13"
+}
