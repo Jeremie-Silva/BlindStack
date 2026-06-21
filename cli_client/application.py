@@ -1,21 +1,21 @@
-import questionary
-import typer
+from beaupy import select
+from rich.console import Console
 from enum import Enum
-from blind_stack_app.models import Player, GameRound, Bot
+from blind_stack_app.models import Player, Bot
 from cli_client.select_bots import cli_select_bots
 from cli_client.select_player import cli_select_player
-from cli_client.start_new_game_round import cli_start_new_game_round
 
 
+console = Console()
 
-logo: str = """
-    $$$$$$$\  $$\       $$$$$$\ $$\   $$\ $$$$$$$\   $$$$$$\ $$$$$$$$\  $$$$$$\   $$$$$$\  $$\   $$\ 
+logo: str = r"""
+    $$$$$$$\  $$\       $$$$$$\ $$\   $$\ $$$$$$$\   $$$$$$\ $$$$$$$$\  $$$$$$\   $$$$$$\  $$\   $$\
     $$  __$$\ $$ |      \_$$  _|$$$\  $$ |$$  __$$\ $$  __$$\\__$$  __|$$  __$$\ $$  __$$\ $$ | $$  |
-    $$ |  $$ |$$ |        $$ |  $$$$\ $$ |$$ |  $$ |$$ /  \__|  $$ |   $$ /  $$ |$$ /  \__|$$ |$$  / 
-    $$$$$$$\ |$$ |        $$ |  $$ $$\$$ |$$ |  $$ |\$$$$$$\    $$ |   $$$$$$$$ |$$ |      $$$$$  /  
-    $$  __$$\ $$ |        $$ |  $$ \$$$$ |$$ |  $$ | \____$$\   $$ |   $$  __$$ |$$ |      $$  $$<   
-    $$ |  $$ |$$ |        $$ |  $$ |\$$$ |$$ |  $$ |$$\   $$ |  $$ |   $$ |  $$ |$$ |  $$\ $$ |\$$\  
-    $$$$$$$  |$$$$$$$$\ $$$$$$\ $$ | \$$ |$$$$$$$  |\$$$$$$  |  $$ |   $$ |  $$ |\$$$$$$  |$$ | \$$\ 
+    $$ |  $$ |$$ |        $$ |  $$$$\ $$ |$$ |  $$ |$$ /  \__|  $$ |   $$ /  $$ |$$ /  \__|$$ |$$  /
+    $$$$$$$\ |$$ |        $$ |  $$ $$\$$ |$$ |  $$ |\$$$$$$\    $$ |   $$$$$$$$ |$$ |      $$$$$  /
+    $$  __$$\ $$ |        $$ |  $$ \$$$$ |$$ |  $$ | \____$$\   $$ |   $$  __$$ |$$ |      $$  $$<
+    $$ |  $$ |$$ |        $$ |  $$ |\$$$ |$$ |  $$ |$$\   $$ |  $$ |   $$ |  $$ |$$ |  $$\ $$ |\$$\
+    $$$$$$$  |$$$$$$$$\ $$$$$$\ $$ | \$$ |$$$$$$$  |\$$$$$$  |  $$ |   $$ |  $$ |\$$$$$$  |$$ | \$$\
     \_______/ \________|\______|\__|  \__|\_______/  \______/   \__|   \__|  \__| \______/ \__|  \__|
 """
 
@@ -28,22 +28,22 @@ class Action(Enum):
 
 
 def cli_application() -> None:
-    typer.echo(logo)
-    typer.echo("Bienvenue dans le jeu BlindStack !")
+    console.print(logo)
+    console.print("Bienvenue dans le jeu BlindStack !")
 
     while True:
-        input_choice: Action = questionary.select(
-            message="Qu'est-ce que vous voulez faire?",
-            choices=[Action.JOUER.value, Action.QUITTER.value],
-        ).ask()
+        input_choice: str = select(options=[Action.JOUER.value, Action.QUITTER.value])
 
         if input_choice == Action.JOUER.value:
             player: Player = cli_select_player()
             bots: list[Bot] = cli_select_bots()
-            game_round: GameRound = cli_start_new_game_round(player=player, bots=bots)
+            # TODO: reprendre ici
+            # game_round: GameRound = cli_start_new_game_round(player=player, bots=bots)
+            # game_round.add_cards()
+            # game_round.add_stacks()
+            # game_round.shuffle_cards()
+            # game_round.distribute_cards()
         elif input_choice == Action.QUITTER.value:
             break
-        else:
-            typer.echo("Action inconnue")
 
-    typer.echo("À bientôt !")
+    console.print("À bientôt !")

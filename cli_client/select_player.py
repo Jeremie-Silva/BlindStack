@@ -1,10 +1,7 @@
-import questionary
+from beaupy import select
 from blind_stack_app.models import Player
 
 
 
 def cli_select_player() -> Player:
-    return questionary.select(
-        message="Veuillez sélectionner un joueur",
-        choices=[questionary.Choice(title=str(player), value=player) for player in Player.objects.all()],
-    ).ask()
+    return select(options=Player.objects.all())

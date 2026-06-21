@@ -1,8 +1,7 @@
-django==6.0.1
-django-ninja==1.5.3
+django==6.0.6
+django-ninja==1.6.2
 httpx==0.28.1
-django-object-actions==5.0.0
+django-object-actions==5.1.2
 django-extensions==4.1
-django-stubs==5.2.9
-typer==0.24.1
-questionary==2.1.1
+django-stubs==6.0.5
+beaupy==3.12.0
